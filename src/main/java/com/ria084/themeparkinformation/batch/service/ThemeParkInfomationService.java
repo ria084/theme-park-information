@@ -1,15 +1,17 @@
 package com.ria084.themeparkinformation.batch.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ria084.themeparkinformation.batch.domain.OpeningHoursNode;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @AllArgsConstructor
@@ -23,6 +25,8 @@ public class ThemeParkInfomationService {
 
     public static void run(String... args) throws IOException, InterruptedException {
 
+        List<OpeningHoursNode.DetailNode> detailNodeList = new ArrayList<>();
+
         // 取得開始日 = 実行した日 を取得
         LocalDate startDate = LocalDate.now();
 
@@ -32,22 +36,41 @@ public class ThemeParkInfomationService {
 
         LocalDate endDate = LocalDate.now();
 
-        for(LocalDate targetDate = startDate; !targetDate.isAfter(endDate); targetDate = targetDate.plusDays(1)){
+        OpeningHoursNode.DetailNode node = new OpeningHoursNode.DetailNode();
+
+        for (LocalDate targetDate = startDate; !targetDate.isAfter(endDate); targetDate = targetDate.plusDays(1)) {
+
+            // 結果格納用オブジェクトを生成
+            node.setTargetDate(targetDate.format(formatter));
+            OpeningHoursNode.TimeDetail detail = new OpeningHoursNode.TimeDetail();
+
             // 取得先urlの日付部分を置換
             String url = String.format(BASE_URL, Integer.parseInt(targetDate.format(formatter)));
 
             // 取得処理
             Document document = Jsoup.connect(url).userAgent(USER_AGENT_CHROME).get();
-            Elements elements = document.getElementsByClass("time ");
+            String element = document.getElementsByClass("time").first().text();
 
             // 出力処理
-            for (Element element : elements) {
-                log.info(element.text());
+            log.info(element);
+
+            // :, - が含まれる場合は、開園時間・閉園時間を抽出してセット
+            if (element.contains("-") && element.contains(":")) {
+                String[] time = element.split("-");
+                detail.setOpenTime(time[0].trim());
+                detail.setCloseTime(time[1].trim());
+            } else { // :, - が含まれない場合は、開園時間・閉園時間はnullにして、値をnoteにいれる
+                detail.setNote(element);
             }
-            // スリープ
-            Thread.sleep(SLEEP_MILLISECONDS);
+            node.setDetail(detail);
+            detailNodeList.add(node);
         }
 
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(detailNodeList);
+        log.info(json);
 
+        // スリープ
+        Thread.sleep(SLEEP_MILLISECONDS);
     }
 }
