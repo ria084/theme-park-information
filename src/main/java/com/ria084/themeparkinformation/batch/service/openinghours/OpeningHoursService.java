@@ -1,4 +1,4 @@
-package com.ria084.themeparkinformation.batch.service.sceape;
+package com.ria084.themeparkinformation.batch.service.openinghours;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
