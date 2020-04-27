@@ -108,7 +108,7 @@ public class OptionService {
         if (startMonth1stDate.isAfter(LocalDate.now())) {
             // 指定日付が現在日付より後の場合はそのまま設定
             optionModel.setStartDate(startMonth1stDate);
-        } else if (startMonth1stDate.isEqual(LocalDate.now().atStartOfDay().toLocalDate())) {
+        } else if (startMonth1stDate.isEqual(UtilDate.get1stDateOfMonth(YearMonth.now()))) {
             // 指定された開始月の1日と現在日付の1日が同一日なら = 指定月と現在月が同じなら、現在日付を設定
             optionModel.setStartDate(LocalDate.now());
         } else { // それ以外の場合はエラーに落とす
@@ -137,7 +137,7 @@ public class OptionService {
         // 両方指定されている場合は、endDateのほうを優先する
         if (!inputEndDate.isEmpty() && !inputEndMonth.isEmpty()) {
             log.info("終了日と終了月が指定されました。終了日の設定を優先して適用します");
-            optionModel.setStartDate(UtilDate.parseStringToDate(inputEndDate));
+            optionModel.setEndDate(UtilDate.parseStringToDate(inputEndDate));
             return;
         }
 
@@ -159,7 +159,7 @@ public class OptionService {
 
         if (inputEndLastDate.isBefore(defaultEndDate)) {
             // 指定日付がデフォルト最終日より前の場合はそのまま設定
-            optionModel.setStartDate(inputEndLastDate);
+            optionModel.setEndDate(inputEndLastDate);
         } else { // それ以外の場合はエラーに落とす
             throw new IllegalArgumentException("終了月の指定が不正です。現在日以降の月を選択してください");
         }
