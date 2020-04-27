@@ -2,18 +2,15 @@ package com.ria084.themeparkinformation.batch.service;
 
 import com.ria084.themeparkinformation.batch.domain.OptionModel;
 import com.ria084.themeparkinformation.batch.exception.ThemeParkInformationException;
+import com.ria084.themeparkinformation.batch.service.openinghours.OpeningHoursService;
 import com.ria084.themeparkinformation.batch.service.option.OptionService;
-import com.ria084.themeparkinformation.batch.service.sceape.OpeningHoursService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.time.format.DateTimeFormatter;
-
 /**
  * 運営情報を取得するためのサービスクラス
- *
+ * <p>
  * Applicationクラスから直接呼び出される、全体の流れをコントロールするクラス
  */
 @Slf4j
@@ -53,7 +50,7 @@ public class ThemeParkInfomationService {
             openingHoursService.generateOpeningInformation("LAND");
 
             openingHoursService.generateOpeningInformation("SEA");
-        } catch (ThemeParkInformationException e){
+        } catch (ThemeParkInformationException e) {
             log.warn("処理を終了します。エラーメッセージ: " + e.getMessage());
         }
 

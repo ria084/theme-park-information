@@ -20,11 +20,6 @@ public class ThemeParkInformationApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        try {
-            infoService.run(args);
-
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
+        infoService.run(args);
     }
 }

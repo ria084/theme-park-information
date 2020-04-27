@@ -6,6 +6,7 @@ import com.ria084.themeparkinformation.batch.domain.OpeningHoursNode;
 import com.ria084.themeparkinformation.batch.domain.OptionModel;
 import com.ria084.themeparkinformation.batch.exception.ThemeParkInformationException;
 import com.ria084.themeparkinformation.batch.util.UtilDate;
+import com.ria084.themeparkinformation.batch.util.UtilFile;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -68,7 +69,7 @@ public class OpeningHoursService {
         }
 
         ObjectMapper mapper = new ObjectMapper();
-        String json = null;
+        String json;
         try {
             json = mapper.writeValueAsString(detailNodeList);
         } catch (JsonProcessingException e) {
@@ -76,7 +77,7 @@ public class OpeningHoursService {
         }
 
         // 出力処理
-        log.info(key + ": " + json);
+        UtilFile.generateFile(json, key);
 
     }
 
