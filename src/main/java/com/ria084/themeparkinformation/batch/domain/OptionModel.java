@@ -1,16 +1,14 @@
 package com.ria084.themeparkinformation.batch.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.YearMonth;
 
 /**
  * 起動に必要な要素を保持するためのクラス
- *
+ * <p>
  * 基本的には起動引数をもとに設定される
  */
 @NoArgsConstructor

@@ -9,14 +9,29 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.YearMonth;
 
+/**
+ * 起動引数の解析と設定を行うクラス
+ */
 @Service
 @AllArgsConstructor
 @Slf4j
 public class OptionService {
+    /**
+     * 引数の情報を保持するモデルクラス
+     */
     private OptionModel optionModel;
 
+    /**
+     * デフォルトの取得月数 (起動日から6か月)
+     */
     private static final int ACQUISITION_PERIOD_MONTH = 6;
 
+    /**
+     * 起動引数の解析を行い、モデルクラスに設定する
+     *
+     * @param args 起動引数
+     * @throws IllegalArgumentException 引数の設定が間違っている場合
+     */
     public void parseOption(String... args) throws IllegalArgumentException {
         // 起動イメージ
         // java -jar xxx.jar -startMonth 取得開始月 -endMonth 取得終了月
@@ -52,6 +67,13 @@ public class OptionService {
         setEndDate(endDate, endMonth);
     }
 
+    /**
+     * 取得期間開始日を定義し、モデルクラスに設定する
+     *
+     * @param inputStartDate  引数 -startDate に設定された文字列
+     * @param inputStartMonth 引数 -startMonth に設定された文字列
+     * @throws IllegalArgumentException 日付の指定が間違っていた場合
+     */
     private void setStartDate(String inputStartDate, String inputStartMonth) throws IllegalArgumentException {
 
         // 両方指定されていない場合は、実行日を指定
@@ -94,6 +116,13 @@ public class OptionService {
         }
     }
 
+    /**
+     * 取得期間終了日を定義し、モデルクラスに設定する
+     *
+     * @param inputEndDate  引数 -endDate に設定された文字列
+     * @param inputEndMonth 引数 -endMonth に設定された文字列
+     * @throws IllegalArgumentException 日付の指定が間違っていた場合
+     */
     private void setEndDate(String inputEndDate, String inputEndMonth) throws IllegalArgumentException {
 
         LocalDate defaultEndDate = UtilDate.getLastDateOfMonth(YearMonth.now().plusMonths(ACQUISITION_PERIOD_MONTH));
