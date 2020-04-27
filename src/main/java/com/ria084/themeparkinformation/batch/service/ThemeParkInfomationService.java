@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Slf4j
 @AllArgsConstructor
+@Service
 public class ThemeParkInfomationService {
     private final OptionService optionService;
     private final OptionModel optionModel;
