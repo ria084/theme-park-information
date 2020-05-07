@@ -2,10 +2,9 @@ package com.ria084.themeparkinformation.batch.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * 運営時間情報を保持する
@@ -18,26 +17,7 @@ public class OpeningHoursNode {
     /**
      * 運営時間情報全体
      */
-    private List<DetailNode> detailNodeList;
-
-    /**
-     * 日付とそれに対応する運営時間情報
-     */
-    @Data
-    @NoArgsConstructor
-    public static class DetailNode {
-
-        /**
-         * 日付
-         */
-        @NonNull
-        private String targetDate;
-
-        /**
-         * 運営時間情報
-         */
-        private TimeDetail detail;
-    }
+    private Map<String, TimeDetail> detailNodeList;
 
     /**
      * 運営時間情報

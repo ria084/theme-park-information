@@ -15,7 +15,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -55,11 +57,11 @@ public class OpeningHoursService {
      * @throws ThemeParkInformationException sleep処理に失敗した場合、jsonへの変換に失敗した場合
      */
     public void generateOpeningInformation(String key) throws ThemeParkInformationException {
-        List<OpeningHoursNode.DetailNode> detailNodeList = new ArrayList<>();
+        Map<String, OpeningHoursNode.TimeDetail> detailNodeList = new HashMap<>();
 
         for (LocalDate targetDate = optionModel.getStartDate(); !targetDate.isAfter(optionModel.getEndDate()); targetDate = targetDate.plusDays(1)) {
-            OpeningHoursNode.DetailNode node = getOpeningHours(key, UtilDate.parseLocalDateToString(targetDate));
-            detailNodeList.add(node);
+            OpeningHoursNode.TimeDetail detail = getOpeningHours(key, UtilDate.parseLocalDateToString(targetDate));
+            detailNodeList.put(UtilDate.parseLocalDateToString(targetDate), detail);
             // スリープ
             try {
                 Thread.sleep(SLEEP_MILLISECONDS);
@@ -89,11 +91,8 @@ public class OpeningHoursService {
      * @return 運営時間情報
      * @throws ThemeParkInformationException 情報取得に失敗した場合
      */
-    private OpeningHoursNode.DetailNode getOpeningHours(String key, String targetDate) throws ThemeParkInformationException {
-        OpeningHoursNode.DetailNode node = new OpeningHoursNode.DetailNode();
-
+    private OpeningHoursNode.TimeDetail getOpeningHours(String key, String targetDate) throws ThemeParkInformationException {
         // 結果格納用オブジェクトを生成
-        node.setTargetDate(targetDate);
         OpeningHoursNode.TimeDetail detail = new OpeningHoursNode.TimeDetail();
 
         // 取得先urlの日付部分を置換
@@ -116,8 +115,7 @@ public class OpeningHoursService {
         } else { // :, - が含まれない場合は、開園時間・閉園時間はnullにして、値をnoteにいれる
             detail.setNote(element);
         }
-        node.setDetail(detail);
 
-        return node;
+        return detail;
     }
 }
