@@ -46,6 +46,8 @@ public class ThemeParkInfomationService {
             throw new IllegalArgumentException("開始・終了日の設定が不正です。終了日は開始日より後の日を指定してください");
         }
 
+        log.info(String.format("取得処理を開始します。対象期間: %s ～ %s", optionModel.getStartDate(), optionModel.getEndDate()));
+
         try {
             openingHoursService.generateOpeningInformation("LAND");
 

@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Service
@@ -57,11 +58,12 @@ public class OpeningHoursService {
      * @throws ThemeParkInformationException sleep処理に失敗した場合、jsonへの変換に失敗した場合
      */
     public void generateOpeningInformation(String key) throws ThemeParkInformationException {
-        Map<String, OpeningHoursNode.TimeDetail> detailNodeList = new HashMap<>();
+        Map<String, OpeningHoursNode.TimeDetail> detailNodeList = new LinkedHashMap<>();
 
         for (LocalDate targetDate = optionModel.getStartDate(); !targetDate.isAfter(optionModel.getEndDate()); targetDate = targetDate.plusDays(1)) {
             OpeningHoursNode.TimeDetail detail = getOpeningHours(key, UtilDate.parseLocalDateToString(targetDate));
             detailNodeList.put(UtilDate.parseLocalDateToString(targetDate), detail);
+
             // スリープ
             try {
                 Thread.sleep(SLEEP_MILLISECONDS);
@@ -92,6 +94,9 @@ public class OpeningHoursService {
      * @throws ThemeParkInformationException 情報取得に失敗した場合
      */
     private OpeningHoursNode.TimeDetail getOpeningHours(String key, String targetDate) throws ThemeParkInformationException {
+
+        log.info("対象パーク: " + key + ", 対象日付: " + targetDate);
+
         // 結果格納用オブジェクトを生成
         OpeningHoursNode.TimeDetail detail = new OpeningHoursNode.TimeDetail();
 
