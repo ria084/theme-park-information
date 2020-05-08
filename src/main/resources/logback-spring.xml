@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+  <!-- デフォルト設定読み込み -->
+  <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+  <!-- コンソール出力 -->
+  <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender" additivity="false">
+    <encoder>
+      <charset>UTF-8</charset>
+      <pattern>%d{yyyy/MM/dd HH:mm:ss} %-5level [%thread] - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!--rootログレベルと使用出力ルール -->
+  <root level="INFO">
+    <appender-ref ref="consoleAppender"/>
+  </root>
+  <logger name="com.ria084.themeparkinformation.batch" additivity="false">
+    <appender-ref ref="consoleAppender"/>
+  </logger>
+</configuration>
